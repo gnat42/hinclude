@@ -62,7 +62,13 @@ var hinclude;
       while (hinclude.buffer.length > 0) {
         var include = hinclude.buffer.pop();
         if (include[1].status === 200 || include[1].status === 304) {
-          include[0].innerHTML = include[1].responseText;
+            include[0].innerHTML = include[1].responseText;
+            var scripts = include[0].getElementsByTagName('script');
+
+            for (var i=0;i<scripts.length;i++)
+                eval(scripts[i].innerHTML);
+
+            document.fire('hinclude:success');
         }
         include[0].className = hinclude.classprefix + include[1].status;
       }
